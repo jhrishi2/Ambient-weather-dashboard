@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Ambient Weather</title>
+  <style>
+    body { font-family: Arial; background: #0f172a; color: white; padding: 20px; }
+    .card { background: #1e2937; padding: 20px; border-radius: 15px; margin: 15px 0; }
+    .big { font-size: 3.5rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center">🌧️ Ambient Weather Station</h1>
+
+  <div class="card">
+    <h2>Temperature</h2>
+    <div id="temp" class="big">-- °C</div>
+  </div>
+
+  <div class="card">
+    <h2>Wind</h2>
+    <div id="wind" class="big">-- km/h</div>
+  </div>
+
+  <div class="card">
+    <h2>Rain</h2>
+    <div>Total: <span id="rtot">-- mm</span></div>
+    <div>Rate: <span id="rr">-- mm/h</span></div>
+  </div>
+
+  <button onclick="refresh()" style="padding:15px; width:100%; font-size:1.2rem;">Refresh</button>
+
+  <script>
+    async function refresh() {
+      const res = await fetch('/api/weather');
+      const d = await res.json();
+      document.getElementById('temp').innerText = d.temp + " °C";
+      document.getElementById('wind').innerText = d.wind + " km/h";
+      document.getElementById('rtot').innerText = d.rainTotal.toFixed(1) + " mm";
+      document.getElementById('rr').innerText = d.rainRate.toFixed(1) + " mm/h";
+    }
+    setInterval(refresh, 60000);
+    refresh();
+  </script>
+</body>
+</html>
